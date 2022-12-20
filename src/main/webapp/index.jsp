@@ -56,7 +56,7 @@
 <p>If you need any help the <strong><a href="http://boxfuse.com/docs">documentation</a></strong> is there for you,<br/>or simply shoot us an email at <a href="mailto:support@boxfuse.com">support@boxfuse.com</a></p>
 
 <p>Say goodbye to snowflake servers.</p>
-<p><strong>thanks you!</strong></p>
+<p><strong>thanks you boxfuse!</strong></p>
 <% } %>
 </body>
 </html>
