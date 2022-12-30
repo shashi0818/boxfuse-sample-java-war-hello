@@ -1,40 +1,105 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List" %>
-<%@ page import="com.google.appengine.api.users.User" %>
-<%@ page import="com.google.appengine.api.users.UserService" %>
-<%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ page import="java.net.InetAddress" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.util.Enumeration" %>
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title>We Make Email Delivery Easy | SendGrid jsp</title>
-    <link type="text/css" rel="stylesheet" href="main.css" />
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <title>Java Web Application</title>
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        table, td, tr {
+            border: 1px solid;
+            border-collapse: collapse;
+        }
+
+        span {
+            font-weight: normal;
+            font-size: 16px;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+
 <%
-    UserService userService = UserServiceFactory.getUserService();
-    User user = userService.getCurrentUser();
-    if (user == null) {
+    String hostName;
+    String serverName;
+    String ipAddr;
+    Date Time;
+    String Dtime;
+    hostName = InetAddress.getLocalHost().getHostName();
+    ipAddr = InetAddress.getLocalHost().getHostAddress();
+    serverName = System.getProperty("java.vm.name");
+    Time = new Date();
+    Dtime = Time.toString();
 %>
-        <meta http-equiv="refresh" content="0; url=<%= userService.createLoginURL(request.getRequestURI()) %>">
-<% 
-    }
-%>
-  </head>
-  <body>
-    <div class="header">
-      <div class="header-top">
-        <img src="sendgrid_logo.png" style="width: 150px;" />
-      </div>
-    </div>
-    <div class="content">
-      <div class="form">
-        <form action="/googlesendgridjava" method="post">
-          <div class="form-input"><label>To:</label> <input name="emailto"/></div>
-          <div class="form-input"><label>Subject: </label><input name="subject"/></div>
-          <div class="form-input"><label>Content: </label><textarea name="content" rows="10" cols="60"></textarea></div>
-          <div><input type="submit" value="Send" class="buttton" /></div>
-        </form>
-      </div>
-    </div>
-  </body>
+
+<h2> Server Info</h2>
+<hr>
+
+<div>
+    <h4>Host Name : <span><%=  hostName %></span></h4>
+    <h4>IP Address: <span><%=  ipAddr %></span></h4>
+    <h4>JVM Name: <span><%=  serverName %></span></h4>
+    <h4> Date & Time: <span> <%= Dtime %></h4>
+</div>
+
+<h4>HTTP Request URL : <span><%= request.getRequestURL() %></span></h4>
+<h4>HTTP Request Method : <span><%= request.getMethod() %></span></h4>
+
+<h4>HTTP Request Headers Received</h4>
+
+<table>
+    <%
+        Enumeration enumeration = request.getHeaderNames();
+        while (enumeration.hasMoreElements()) {
+            String name = (String)
+                    enumeration.nextElement();
+            String value = request.getHeader(name);
+    %>
+    <tr>
+        <td>
+            <%=name %>
+        </td>
+        <td>
+            <%=value %>
+        </td>
+    </tr>
+    <% } %>
+</table>
+
+<h4>HTTP Cookies Received</h4>
+
+<table>
+    <%
+
+        Cookie[] arr1 = request.getCookies();
+        String cookiename = "";
+        String cookievalue ="";
+        if ((arr1 != null) && (arr1.length > 0))  {
+        for (int i = 0; i < arr1.length; i++) {
+            cookiename = arr1[i].getName();
+            cookievalue = arr1[i].getValue();
+        }
+
+    %>
+    <tr>
+        <td>
+            <%=cookiename %>
+        </td>
+        <td>
+            <%=cookievalue %>
+        </td>
+    </tr>
+    <% } %>
+</table>
+
+
+</body>
 </html>
