@@ -1,105 +1,62 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" %>
-<%@ page import="java.net.InetAddress" %>
-<%@ page import="java.util.Date" %>
-<%@ page import="java.util.Enumeration" %>
-<!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <title>Java Web Application</title>
-    <style>
-        body {
-            font-family: 'Open Sans', sans-serif;
-        }
-
-        table, td, tr {
-            border: 1px solid;
-            border-collapse: collapse;
-        }
-
-        span {
-            font-weight: normal;
-            font-size: 16px;
-            color: black;
-        }
-    </style>
+    <title>Boxfuse Sample App: success!</title>
 </head>
-<body>
+<body style="text-align: center">
+<h1>Congratulations!</h1>
+<img src="boxfuse.png">
 
-<%
-    String hostName;
-    String serverName;
-    String ipAddr;
-    Date Time;
-    String Dtime;
-    hostName = InetAddress.getLocalHost().getHostName();
-    ipAddr = InetAddress.getLocalHost().getHostAddress();
-    serverName = System.getProperty("java.vm.name");
-    Time = new Date();
-    Dtime = Time.toString();
-%>
+<h2>welcome to my version: </h2>
 
-<h2> Server Info</h2>
-<hr>
+<p>This Instance is running on <strong><%= System.getenv("BOXFUSE_PLATFORM_NAME") %>
+</strong> and has the id <strong><%= System.getenv("BOXFUSE_INSTANCE_ID") %>
+</strong>.</p>
 
-<div>
-    <h4>Host Name : <span><%=  hostName %></span></h4>
-    <h4>IP Address: <span><%=  ipAddr %></span></h4>
-    <h4>JVM Name: <span><%=  serverName %></span></h4>
-    <h4> Date & Time: <span> <%= Dtime %></h4>
-</div>
+<p>It is based on the Image <strong><%= System.getenv("BOXFUSE_IMAGE_COORDINATES")%>
+</strong> generated from <strong><%= System.getenv("BOXFUSE_PAYLOAD_NAME")%>
+</strong></p>
 
-<h4>HTTP Request URL : <span><%= request.getRequestURL() %></span></h4>
-<h4>HTTP Request Method : <span><%= request.getMethod() %></span></h4>
+<% if("virtualbox".equals(System.getenv("BOXFUSE_PLATFORM_ID"))) { %>
+<h2 style="margin-top: 80px">Next steps</h2>
 
-<h4>HTTP Request Headers Received</h4>
+<p style="margin-bottom: 20px;">
+    Display the Instance console:<br/>
+    <strong>boxfuse logs <%= System.getenv("BOXFUSE_INSTANCE_ID") %>
+    </strong>
+</p>
 
-<table>
-    <%
-        Enumeration enumeration = request.getHeaderNames();
-        while (enumeration.hasMoreElements()) {
-            String name = (String)
-                    enumeration.nextElement();
-            String value = request.getHeader(name);
-    %>
-    <tr>
-        <td>
-            <%=name %>
-        </td>
-        <td>
-            <%=value %>
-        </td>
-    </tr>
-    <% } %>
-</table>
+<p style="margin-bottom: 20px;">
+    List all running Instances:<br/>
+    <strong>boxfuse ps</strong>
+</p>
 
-<h4>HTTP Cookies Received</h4>
+<P style="margin-bottom: 20px;">
+    List all Bootable Apps:<br/>
+    <strong>boxfuse ls</strong>
+</p>
 
-<table>
-    <%
+<p>
+    Gracefully kill the Instance:<br/>
+    <strong>boxfuse kill <%= System.getenv("BOXFUSE_INSTANCE_ID") %>
+    </strong>
+</p>
 
-        Cookie[] arr1 = request.getCookies();
-        String cookiename = "";
-        String cookievalue ="";
-        if ((arr1 != null) && (arr1.length > 0))  {
-        for (int i = 0; i < arr1.length; i++) {
-            cookiename = arr1[i].getName();
-            cookievalue = arr1[i].getValue();
-        }
+<p>
+    Deploy this Image unchanged on AWS:<br/>
+    <strong>boxfuse run -env=prod <%= System.getenv("BOXFUSE_APP")%>:<%= System.getenv("BOXFUSE_IMAGE_VERSION")%>
+    </strong>
+</p>
+<% } else { %>
+<h2 style="margin-top: 80px">Now it's your turn!</h2>
 
-    %>
-    <tr>
-        <td>
-            <%=cookiename %>
-        </td>
-        <td>
-            <%=cookievalue %>
-        </td>
-    </tr>
-    <% } %>
-</table>
+<p>Check out <strong><a href="https://github.com/boxfuse/boxfuse-sample-java-war-hello">this app</a></strong> from GitHub, modify it, and give it version 2.<br/>You are now ready to fuse and <strong>deploy it with zero downtime</strong> using the commands you already know.</p>
 
+<p>Alternatively you can go back to the <strong><a href="https://console.boxfuse.com">Boxfuse Console</a></strong>,<br/> and simply create your own.</p>
 
+<p>If you need any help the <strong><a href="http://boxfuse.com/docs">documentation</a></strong> is there for you,<br/>or simply shoot us an email at <a href="mailto:support@boxfuse.com">support@boxfuse.com</a></p>
+
+<p>Say goodbye to snowflake servers.</p>
+<p><strong>thanks you!</strong></p>
+<% } %>
 </body>
 </html>
